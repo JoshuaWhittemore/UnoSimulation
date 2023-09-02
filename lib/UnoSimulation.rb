@@ -2,6 +2,7 @@
 
 require_relative "UnoSimulation/version"
 require_relative "UnoSimulation/deck"
+require_relative "UnoSimulation/scenarios"
 
 module UnoSimulation
   class Error < StandardError; end

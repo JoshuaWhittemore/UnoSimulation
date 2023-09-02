@@ -1,16 +1,51 @@
 # UnoSimulation
 
-
+####################################################################################
 # TODO
-* don't subclass array, it has caused you issues.
+## Required
+* Don't subclass array, it has caused you issues.
+* Call simulate.rb from the rake task, add option to do it verbosely to rake task.
+* Make it work:
+    1. the executable should work with both options.
 
 
-# Nice to have
+## Nice to have
+* remove gemspec file from this project
+* remove folders/files that you don't understand, don't think you're going to need.
+* call to rake with z-shell
+* improve test coverage
+
+
+## Formatting/Renaming (do these at the end)
+* change name of project from UnoSimulation to just Uno
+* add nice instructions to readme to install project, to run project, to run project tests, and to run project tests with rake tasks
+
+## Optional
 * -v, --verbose option which shows what the top card was and what the drawn cards were.
 
 
+# REQUIRMENTS, MAIN
 
 
+#####################
+
+```zsh
+$ rake --tasks
+rake run[num_samples]  # run
+rake standard          # cleanup
+rake test              # Run tests
+task default: "test"
+
+Rake::TestTask.new do |task|
+  task.verbose = true
+  task.pattern = "test/*_test.rb"
+end
+
+task default: [:test, :standard]
+```
+
+
+####################################################################################
 
 TODO: Delete this and the text below, and describe your gem
 

@@ -2,6 +2,10 @@
 
 require "bundler/gem_tasks"
 require "rake/testtask"
+require_relative 'lib/UnoSimulation'
+
+
+require 'byebug'
 
 Rake::TestTask.new(:test) do |t|
   t.verbose = true
@@ -20,24 +24,17 @@ require "standard/rake"
 DEFAULT_NUM_SAMPLES = "10"
 
 desc "run"
-task :run, [:num_samples] do |t, args|
+task :run, [:num_samples, :verbose] do |t, args|
   num_samples = args.fetch(:num_samples, DEFAULT_NUM_SAMPLES).to_i
-  puts "num_samples: #{num_samples}, class: #{num_samples.class}"
+
+  verbose = args.fetch(:verbose, 'false')
+  verbose = verbose == 'true'
+
+  num_samples.times do 
+    n = UnoSimulation::Scenarios.experiment(verbose: verbose)
+    print(n, " ")
+  end
 end
 
 task default: %i[test standard:fix]
 
-#####################
-
-# $ rake --tasks
-# rake run[num_samples]  # run
-# rake standard          # cleanup
-# rake test              # Run tests
-# task default: "test"
-
-# Rake::TestTask.new do |task|
-#   task.verbose = true
-#   task.pattern = "test/*_test.rb"
-# end
-
-# task default: [:test, :standard]
