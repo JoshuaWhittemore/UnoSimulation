@@ -25,7 +25,7 @@ task :run, [:num_samples] do |t, args|
   puts "num_samples: #{num_samples}, class: #{num_samples.class}"
 end
 
-task default: %i[test standard]
+task default: %i[test standard:fix]
 
 #####################
 

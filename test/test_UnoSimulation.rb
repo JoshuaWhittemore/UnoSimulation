@@ -24,11 +24,11 @@ class UnoDeckTest < Minitest::Test
     while deck.any?
       draw_card = deck.draw
 
-      covers_count += 1 if draw_card.covers?(top_card)
+      covers_count += 1 if draw_card.match?(top_card)
     end
 
     puts "simple test running"
-    assert_equal 32, covers_count
+    assert_equal 36, covers_count
   end
 end
 

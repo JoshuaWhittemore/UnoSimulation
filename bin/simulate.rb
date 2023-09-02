@@ -1,12 +1,18 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/uno.rb'
 
-require 'slop'  # simple lightweight options parsing
+# $ ruby test/uno_test.rb -v
+
+require_relative '../lib/UnoSimulation'
+
+require 'byebug'
+
+require 'slop'  # Simple Lightweight Options Parsing
 # https://www.rubydoc.info/gems/slop/4.10.1
 
 opts = Slop.parse do |o|
   o.integer '-n', '--num_samples', 'number of samples to draw, default is 100.', default: 100
+  o.bool '-v', '--verbose', 'enable verbose mode', default: false
 
   o.on '-h', '--help' do
     puts o
@@ -25,13 +31,15 @@ module Scenarios
   # return both the deck (shuffled) and the card.
   # 
   def self.draw_positive_numbered()
-    deck = Uno::Deck.new.shuffle
-
-
-    positive_numbered_card = deck.draw_positive_numbered()
+    deck = UnoSimulation::Deck.new
     deck.shuffle!
 
-    [deck, positively_numbered_card]
+    idx = deck.index { |card| (1..9).cover?(card.number_or_symbol) }
+    positive_numbered_card = deck.delete_at(idx)
+
+    deck.shuffle!
+
+    [deck, positive_numbered_card]
   end
 
   # Player has no cards in hand that match the top card on the discard pile.
@@ -41,42 +49,36 @@ module Scenarios
   # Precondition: at least one card in the deck will cover the top card.
   # 
   def self.draw_until_match(deck, top_card)
-    drawn_cards = []
+    deck.shuffle!
+    drawn_cards = [deck.draw]
 
-    drawn_cards << deck.draw until drawn_cards.first.covers?(top_card)
+    until drawn_cards.last.match?(top_card)
+      drawn_cards << deck.draw
+    end
 
     drawn_cards
   end
 
+  def self.experiment()
+    deck, top_card = Scenarios.draw_positive_numbered()
+    drawn_cards = Scenarios.draw_until_match(deck, top_card)
+
+    puts "-" * 78
+    puts top_card
+    puts drawn_cards.map(&:to_s).join(',')
+
+    drawn_cards.size
+  end
+
+
+
+
 end
 
 
-deck, top_card = Scenarios.draw_positive_numbered()
-drawn_cards = Scenarios.draw_until_match(deck, top_card)
-
-pp drawn_cards
-exit
-
-
-
-def experiment 
-  deck = Uno::Deck.new
-  deck.shuffle!
-  top_card = deck.draw_positive_numbered()
-  deck.shuffle!
-  
-  hand = []
-  hand << deck.draw
-  
-  hand << deck.draw until hand.last.covers?(top_card)
-  
-  hand.size
+10.times do 
+  n = Scenarios.experiment()
+  puts n
 end
 
-total_draws = []
 
-opts[:num_samples].times do 
-  total_draws << experiment()
-end
-
-puts total_draws.join(' ')
