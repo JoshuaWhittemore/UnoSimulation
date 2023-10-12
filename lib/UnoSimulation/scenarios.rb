@@ -1,4 +1,5 @@
 require_relative 'deck'
+require 'byebug'
 
 module UnoSimulation
   module Scenarios
