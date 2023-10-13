@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require 'forwardable'
-require_relative 'card'
+require "forwardable"
+require_relative "card"
 
 module UnoSimulation
-
-  # Code would be a little simpler if Deck was subclassed from Array, but that is 
-  # generally bad practice.
-  # 
+  # Code would be a little simpler if Deck was subclassed from Array, but b
+  # subclassing core classes can lead to some unexpected side effects.
+  #
   class Deck
     extend Forwardable
     def_delegator :@cards, :shuffle!, :shuffle!
@@ -15,7 +14,7 @@ module UnoSimulation
     def_delegator :@cards, :size, :size
     def_delegator :@cards, :index, :index
 
-    attr :cards
+    attr_reader :cards
 
     # FIXME: what is correct way of having an instance variable, is it attr ? attr_reader etc?
     def initialize
@@ -24,11 +23,11 @@ module UnoSimulation
       # For each color, there is/are:
       %i[red green blue yellow].each do |color|
         # a single '0' card,
-        @cards  << Card.new(color, 0)
+        @cards << Card.new(color, 0)
 
         2.times do
           # 2 cards each with numbers 1-9,
-          1.upto(9) { |number| @cards  << Card.new(color, number) }
+          1.upto(9) { |number| @cards << Card.new(color, number) }
 
           # 2 cards each with symbols 'reverse', 'skip' and 'draw 2'.
           %i[reverse skip draw2].each { |symbol| @cards << Card.new(color, symbol) }
@@ -36,10 +35,9 @@ module UnoSimulation
       end
 
       # Add 12 wild cards.
-      4.times { @cards  << Card.new(:wild, :none) }
-      4.times { @cards  << Card.new(:wild, :draw4) }
-      4.times { @cards  << Card.new(:wild, :customizeable) }
-
+      4.times { @cards << Card.new(:wild, :none) }
+      4.times { @cards << Card.new(:wild, :draw4) }
+      4.times { @cards << Card.new(:wild, :customizeable) }
     end
 
     # Draw a card from the deck that is numbered 1-9.

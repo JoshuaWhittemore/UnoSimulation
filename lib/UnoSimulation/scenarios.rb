@@ -27,7 +27,7 @@ module UnoSimulation
       deck.cards.shuffle!
       drawn_cards = []
 
-      loop do 
+      loop do
         card = deck.draw
         drawn_cards << card
 
