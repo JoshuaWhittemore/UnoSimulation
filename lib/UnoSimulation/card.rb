@@ -11,16 +11,9 @@ module UnoSimulation
     # of the discard pile.
     #
     def match?(top_card)
-      return true if @color == :wild
-
-      # Gotcha: not allowing cards with a '0' on them or with symbols: reverse, skip or
-      # 'draw 2' to 'cover' the top card for reasons mentioned in writeup.
-      if (0..9).cover?(@number_or_symbol)
-        return true if @color == top_card.color
-        return true if @number_or_symbol == top_card.number_or_symbol
-      end
-
-      false
+      @color == :wild ||
+        @color == top_card.color ||
+        @number_or_symbol == top_card.number_or_symbol
     end
 
     def to_s
