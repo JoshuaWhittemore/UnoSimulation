@@ -2,6 +2,8 @@ module UnoSimulation
   class Card
     attr_reader :color, :number_or_symbol
 
+    VALID_COLORS = %i[red green blue yellow]
+
     def initialize(color, number_or_symbol)
       @color = color
       @number_or_symbol = number_or_symbol

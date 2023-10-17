@@ -21,7 +21,7 @@ module UnoSimulation
       @cards = []
 
       # For each color, there is/are:
-      %i[red green blue yellow].each do |color|
+      Card::VALID_COLORS.each do |color|
         # a single '0' card,
         @cards << Card.new(color, 0)
 
